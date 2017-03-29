@@ -10,7 +10,7 @@ using System.Security.Cryptography;
 
 namespace vissidarte
 {
-    public partial class ajaxbaden : System.Web.UI.Page
+    public partial class ajaxvissi : System.Web.UI.Page
     {
         dbhelper db = new dbhelper();
         object cnn, rs;

@@ -55,6 +55,19 @@
   <ItemGroup>
     <Content Include="admin.html" />
     <Content Include="ajaxvissi.aspx" />
+    <Content Include="Global.asax" />
+    <Content Include="img\add.png" />
+    <Content Include="img\associa.png" />
+    <Content Include="img\cancel.png" />
+    <Content Include="img\copy.png" />
+    <Content Include="img\delete.png" />
+    <Content Include="img\info.png" />
+    <Content Include="img\left.png" />
+    <Content Include="img\modify.png" />
+    <Content Include="img\PICTURE.png" />
+    <Content Include="img\refresh.png" />
+    <Content Include="img\update.png" />
+    <Content Include="img\user.png" />
     <Content Include="js\vissi.css" />
     <Content Include="js\vissi.js" />
     <Content Include="js\bootstrap-baden-theme.css" />
@@ -77,6 +90,9 @@
       <DependentUpon>ajaxvissi.aspx</DependentUpon>
     </Compile>
     <Compile Include="dbmysql.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -87,9 +103,7 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="img\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

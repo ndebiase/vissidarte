@@ -7,10 +7,10 @@
     <title>UPLOAD FILES</title>
     <meta http-equiv="pragma" content="no-cache" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href='lib/jquery.mobile-1.4.5.min.css' />
-    <link rel="stylesheet" href='lib/baden.css' />
-    <script type="text/javascript" src="lib/jquery-1.11.3.min.js"></script>
-    <script type="text/javascript" src="lib/jquery.mobile-1.4.5.min.js"></script>
+    <link rel="stylesheet" href='js/jquery.mobile-1.4.5.min.css' />
+    <link rel="stylesheet" href='js/vissi.css' />
+    <script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>
 </head>
 <body>
     <form id="form1" runat="server" data-ajax="false">

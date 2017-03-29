@@ -51,7 +51,7 @@ function breport(tipo) {
     var k, ret, htm, lista = $('#news');
     $.mobile.loading("show");
     $.ajax({
-        url: "ajaxbaden.aspx",
+        url: "ajaxvissi.aspx",
         type: "POST",
         dataType: "json",
         data: { op: 0, news: tipo, id: (REGISTRO.utente == null || REGISTRO.utente.tipo == 0) ? 0 : REGISTRO.utente.id }
@@ -104,7 +104,7 @@ function blogin(tagid) {
             op1 = 2;
         $.mobile.loading("show");
         $.ajax({
-            url: "ajaxbaden.aspx",
+            url: "ajaxvissi.aspx",
             type: "POST",
             dataType: "json",
             data: { op: op1, a: log.val(), b: pwd.val(), id: tagid }
@@ -148,7 +148,7 @@ function blogout() {
     $('#chgpwd').hide();
     $.mobile.loading("show");
     $.ajax({
-        url: "ajaxbaden.aspx",
+        url: "ajaxvissi.aspx",
         type: "POST",
         dataType: "json",
         data: { op: 2 }
@@ -177,7 +177,7 @@ function dochangepwd() {
     else {
         $.mobile.loading("show");
         $.ajax({
-            url: "ajaxbaden.aspx",
+            url: "ajaxvissi.aspx",
             type: "POST",
             dataType: "json",
             data: { op: 3, a: REGISTRO.utente.email, b: oldpwd.val(), b2: newpwd1.val() }
@@ -242,7 +242,7 @@ function setNews(tn) {
     anno = (anno.getMonth() < 7) ? anno.getFullYear() - 1 : anno.getFullYear();
     $.mobile.loading("show");
     $.ajax({
-        url: "ajaxbaden.aspx",
+        url: "ajaxvissi.aspx",
         type: "POST",
         dataType: "json",
         async: false,
@@ -318,7 +318,7 @@ function setReport(ll) {
         REGISTRO.tabella.filtro = "tipo=" + REGISTRO.tabelle.tiponews[REGISTRO.tabella.tiponews].cod;
     $.mobile.loading("show");
     $.ajax({
-        url: "ajaxbaden.aspx",
+        url: "ajaxvissi.aspx",
         type: "POST",
         dataType: "json",
         data: { op: 4, tab: REGISTRO.tabella.name, f: REGISTRO.tabella.filtro, abi: REGISTRO.utente.abi }
@@ -375,7 +375,7 @@ function setTabella(nome) {
     }
     $.mobile.loading("show");
     $.ajax({
-        url: "ajaxbaden.aspx",
+        url: "ajaxvissi.aspx",
         type: "POST",
         dataType: "json",
         data: { tab: nome, op: 5 }
@@ -448,7 +448,7 @@ function rowAdd() {
     var ret;
     getRiga();
     $.ajax({
-        url: "ajaxbaden.aspx",
+        url: "ajaxvissi.aspx",
         type: "POST",
         dataType: "json",
         data: { op: 7, tab: REGISTRO.tabella.name, riga: REGISTRO.tabella.riga }
@@ -475,7 +475,7 @@ function rowUpdate() {
     var ret;
     getRiga();
     $.ajax({
-        url: "ajaxbaden.aspx",
+        url: "ajaxvissi.aspx",
         type: "POST",
         dataType: "json",
         data: { tab: REGISTRO.tabella.name, op: 8, riga: REGISTRO.tabella.riga }
@@ -500,7 +500,7 @@ function rowDelete() {
     if (!confirm("Confermi la cancellazione della riga ?"))
         return;
     $.ajax({
-        url: "ajaxbaden.aspx",
+        url: "ajaxvissi.aspx",
         type: "POST",
         dataType: "json",
         data: { tab: REGISTRO.tabella.name, op: 6, riga: REGISTRO.tabella.riga }
@@ -595,7 +595,7 @@ function uploadFile() {
     var par = "";
     if (REGISTRO.tabella.name == "news")
         par = "?up=1&txt=" + REGISTRO.tabella.riga.link + "&dir=" + REGISTRO.tabelle.tiponews[REGISTRO.tabella.tiponews].dir;
-    window.open("ajaxbaden.aspx" + par, "myupload");
+    window.open("ajaxvissi.aspx" + par, "myupload");
 }
 function bimporta() {
     var err = "", ret, j, k, r, rqq, f, qq, t = $("#ta").val();
@@ -615,7 +615,7 @@ function bimporta() {
                     r[f[j]] = rqq[j];
             }
             $.ajax({
-                url: "ajaxbaden.aspx",
+                url: "ajaxvissi.aspx",
                 type: "GET",
                 dataType: "json",
                 async: false,
@@ -644,7 +644,7 @@ function bimporta() {
 function bdelTMP() {
     $.mobile.loading("show");
     $.ajax({
-        url: "ajaxbaden.aspx",
+        url: "ajaxvissi.aspx",
         type: "POST",
         dataType: "json",
         data: { op: 15 }

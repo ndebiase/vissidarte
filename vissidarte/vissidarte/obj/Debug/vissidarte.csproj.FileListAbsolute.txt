@@ -1,0 +1,6 @@
+C:\Users\Domenico\documents\visual studio 2015\Projects\vissidarte\vissidarte\obj\Debug\vissidarte.csprojResolveAssemblyReference.cache
+C:\Users\Domenico\documents\visual studio 2015\Projects\vissidarte\vissidarte\bin\vissidarte.dll.config
+C:\Users\Domenico\documents\visual studio 2015\Projects\vissidarte\vissidarte\bin\vissidarte.dll
+C:\Users\Domenico\documents\visual studio 2015\Projects\vissidarte\vissidarte\bin\vissidarte.pdb
+C:\Users\Domenico\documents\visual studio 2015\Projects\vissidarte\vissidarte\obj\Debug\vissidarte.dll
+C:\Users\Domenico\documents\visual studio 2015\Projects\vissidarte\vissidarte\obj\Debug\vissidarte.pdb
