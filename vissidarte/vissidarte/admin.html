@@ -1,0 +1,213 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>VISSI D'ARTE - PANNELLO DI CONTROLLO</title>
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href='js/jquery.mobile-1.4.5.min.css' />
+    <link rel="stylesheet" href='js/vissi.css' />
+    <script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>
+    <script type="text/javascript" src="js/vissi.js?dt=20170321"></script>
+</head>
+<body>
+    <div data-role="page" id="pmain">
+        <div data-role="header" data-position="fixed">
+            <table width="100%">
+                <tr>
+                    <td rowspan="3"><img class="logo" src="img/logomobile.png" /></td>
+                    <td align="right"></td>
+                </tr>
+                <tr>
+                    <td align="right">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td align="right"><div class="siglaut"></div></td>
+                </tr>
+            </table>
+            <a href="javascript:window.close()" class="ui-btn-right" data-icon="delete">ESCI</a>
+            <div data-role="navbar">
+                <ul>
+                    <li><a href="javascript: btabelle(0)">TABELLE</a></li>
+                </ul>
+            </div>
+        </div>
+        <div data-role="content">
+            <ul data-role="listview">
+                <li>&nbsp;</li>
+                <li>
+                    <table>
+                        <tr>
+                            <td>email:</td>
+                            <td>password:</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="text" id="login" />
+                            </td>
+                            <td>
+                                <input type="password" id="pwd" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><a href="javascript:blogin()" data-role="button">LOGIN</a></td>
+                            <td><a href="javascript:blogout()" data-role="button">LOGOUT</a></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" id="bchgpwd"><a href="javascript:changepwd()" data-role="button">CAMBIA PASSWORD</a></td>
+                        </tr>
+                    </table>
+                    <table id="chgpwd">
+                        <tr>
+                            <td>vecchia password:</td>
+                            <td>
+                                <input type="password" id="oldpwd" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>nuova password:</td>
+                            <td>
+                                <input type="password" id="newpwd1" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>conferma nuova password:</td>
+                            <td>
+                                <input type="password" id="newpwd2" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"><a href="javascript:dochangepwd()" data-role="button">CAMBIA</a></td>
+                        </tr>
+                    </table>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div data-role="page" id="ptabelle">
+        <div data-role="header" data-position="fixed">
+            <table width="100%">
+                <tr>
+                    <td rowspan="3"><img class="logo" src="img/logomobile.png" /></td>
+                    <td align="right">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td align="right"><div class="siglaut"></div></td>
+                </tr>
+            </table>
+            <a href="#pmain" class="ui-btn-right" data-icon="home">HOME</a>
+            <div id="navbar1" data-role="navbar">
+                <ul>
+                    <li><a href="javascript:setTabella('news')">NEWS</a></li>
+                    <li><a href="javascript:setTabella('tabelle')">TABELLE</a></li>
+                    <li><a href="javascript:setTabella('utenti')">UTENTI</a></li>
+                    <!--
+                    <li><a href="#pimport">IMPORTA</a></li>
+                    <li><a href="#pexport">ESPORTA</a></li>
+                    -->
+                </ul>
+            </div>
+            <table>
+                <tr>
+                    <td><a href="javascript:newItem()" data-role="button"><img src="img/add.png" title="Aggiungi nuovo" width="32" /></a></td>
+                    <td><select id="tiponews" onchange="setTiponews(value)"></select></td>
+                    <td width="300"><input type="text" id="filtro1" title="Impostare come una clausola where" /></td>
+                    <td><a href="javascript:setReport(lista)"><img src="img/refresh.png" title="Refresh" width="24" /></a></td>
+                </tr>
+            </table>
+        </div>
+        <div data-role="content">
+            <div id="lista"></div>
+        </div>
+    </div>
+    <div data-role="page" id="priga">
+        <div data-role="header" data-position="fixed">
+            <a class="ui-btn-right" data-icon="back" data-rel="back">INDIETRO</a>
+            <img class="logo" src="img/smartschool1.png" />
+            <table>
+                <tr>
+                    <td>
+                        <a href="javascript:rowDelete()" data-role="button">
+                            <img src="img/delete.png" title="Cancella riga corrente" width="32" />
+                        </a>
+                    </td>
+                    <td>
+                        <a href="javascript:rowAdd()" data-role="button">
+                            <img src="img/add.png" title="Aggiungi nuova riga" width="32" />
+                        </a>
+                    </td>
+                    <td>
+                        <a href="javascript:rowUpdate()" data-role="button">
+                            <img src="img/update.png" title="Aggiorna riga corrente" width="32" />
+                        </a>
+                    </td>
+                    <td id="bupload">
+                        <a href="javascript:uploadFile()" data-role="button">
+                            <img src="img/picture.png" title="Carica immagini e file associati" width="32" />
+                        </a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div data-role="content">
+            <div id="riga"></div>
+        </div>
+    </div>
+    <div data-role="page" id="pimport">
+        <div data-role="header" data-position="fixed">
+            <a class="ui-btn-right" data-icon="back" data-rel="back">INDIETRO</a>
+            <h2>IMPORTAZIONE DI MASSA UTENTI</h2>
+            <div data-role="navbar">
+                <ul>
+                    <li><a href="javascript:bimporta()">IMPORTA</a></li>
+                    <li><a href="javascript:bdelTMP()">AZZERA TABELLA DI FRONTIERA</a></li>
+                </ul>
+            </div>
+        </div>
+        <div data-role="content">
+            <textarea id="ta" height="100%">
+                Incolla in questa area i dati da importare poi premi IMPORTA.
+                Il formato è il seguente:
+
+                Nella prima riga metti i nomi dei campi da importare. Se due campi consecutivi hanno lo stesso nome, i rispettivi valori vengono concatenati.
+                Dalla seconda riga in poi metti i valori seguendo lo stesso ordine della prima riga.
+                Il separatore sulla stessa riga è sempre il punto e virgola.
+                Non lasciare altri spazi.
+                Non servono gli apici.
+                I nomi dei campi possono essere: id,tagid,email,pwd,cognome,nome,tipo,note,info
+                I campi obbligatori sono: cognome,nome,tipo
+                Se il primo campo è id effettua solo un aggiornamento,
+                altrimenti mette tutto nella tabella di frontiera.
+                esempi:
+
+                email;cognome;nome;tipo
+                ndb@derwid.it;ROSSI;MARIO;0
+
+                id;info;info;info;info;info
+                7711;;223166657 3293953463 (P);DEI MILLE N. 20 20098 SAN GIULIANO MILANESE;;
+                ...
+            </textarea>
+        </div>
+    </div>
+    <div data-role="page" id="pexport">
+        <div data-role="header" data-position="fixed">
+            <a class="ui-btn-right" data-icon="back" data-rel="back">INDIETRO</a>
+            <h2>ESPORTAZIONE TABELLE</h2>
+            <div data-role="navbar">
+                <ul>
+                    <li><a href="javascript:besporta()">ESPORTA</a></li>
+                </ul>
+            </div>
+            <table>
+                <tr>
+                    <td width="400"><label for="icampi">campi:</label><input type="text" id="icampi" value="matr,email,cognome,nome,info" /></td>
+                    <td width="400"><label for="ifiltri">where:</label><input type="text" id="ifiltri" value="tipo=0" /></td>
+                    <td width="400"><label for="iord">ordina per:</label><input type="text" id="iord" value="cognome,nome" /></td>
+                </tr>
+            </table>
+        </div>
+        <div data-role="content">
+        </div>
+    </div>
+</body>
+</html>
