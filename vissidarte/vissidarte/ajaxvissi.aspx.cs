@@ -624,24 +624,25 @@ namespace vissidarte
                 if (news == "-1")
                 {
                     if (src == "")
-                        sql = "SELECT n.href, n.tit, n.txt, n.img, n.dtpub, t.des from " + db.tb("news") + " n," + db.tb("tabelle") + " t where n.tipo=t.cod and t.tip='NEWS' and n.tipo=0 and now() >= n.dtpub and now() <= n.dtexp order by n.ord desc";
+                        sql = "SELECT n.alt, n.tags, n.tit, n.txt, n.img, n.dtpub, t.des from " + db.tb("news") + " n," + db.tb("tabelle") + " t where n.tipo=t.cod and t.tip='NEWS' and n.tipo=0 and now() >= n.dtpub and now() <= n.dtexp order by n.ord desc";
                     else
-                        sql = "SELECT n.href, n.tit, n.txt, n.img, n.dtpub, t.des from " + db.tb("news") + " n," + db.tb("tabelle") + " t " +
+                        sql = "SELECT n.alt, n.tags, n.tit, n.txt, n.img, n.dtpub, t.des from " + db.tb("news") + " n," + db.tb("tabelle") + " t " +
                             "where n.tipo=t.cod and t.tip='NEWS' and now() >= n.dtpub and now() <= n.dtexp and " +
                             "(n.tit like '%" + src + "%' or n.txt like '%" + src + "%') " +
                             "order by t.des, n.ord desc";
                 }
                 else
-                    sql = "SELECT n.href, n.tit, n.txt, n.img, n.dtpub, t.des from " + db.tb("news") + " n," + db.tb("tabelle") + " t where n.tipo=t.cod and t.tip='NEWS' and n.tipo=" + news + " and now() >= n.dtpub and now() <= n.dtexp order by n.ord desc";
+                    sql = "SELECT n.alt, n.tags, n.tit, n.txt, n.img, n.dtpub, t.des from " + db.tb("news") + " n," + db.tb("tabelle") + " t where n.tipo=t.cod and t.tip='NEWS' and n.tipo=" + news + " and now() >= n.dtpub and now() <= n.dtexp order by n.ord desc";
                 rs = db.RunSQLrs(sql, cnn);
                 while (rs != null && db.Read(rs))
                 {
                     list += "{sez:\"" + db.gets(rs, "des") + "\"," +
                         "img:\"" + db.gets(rs, "img") + "\"," +
+                        "tags:\"" + db.gets(rs, "tags") + "\"," +
                         "dt:\"" + db.gets(rs, "dtpub").Substring(0, 10) + "\"," +
                         "tit:\"" + db.bonificajson(db.gets(rs, "tit")) + "\"," +
                         "txt:\"" + db.bonificajson(db.gets(rs, "txt")) + "\"," +
-                        "href:\"" + db.gets(rs, "href") + "\"},";
+                        "alt:\"" + db.gets(rs, "alt") + "\"},";
                 }
                 db.Close(rs);
                 list += "]";

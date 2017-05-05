@@ -1,101 +1,136 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
-  <!-- Site made with Mobirise Website Builder v3.12.1, https://mobirise.com -->
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="generator" content="Mobirise v3.12.1, mobirise.com">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="shortcut icon" href="assets/images/logo.png" type="image/x-icon">
-  <meta name="description" content="">
-  
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic&amp;subset=latin">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,700">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i">
-  <link rel="stylesheet" href="assets/bootstrap-material-design-font/css/material.css">
-  <link rel="stylesheet" href="assets/tether/tether.min.css">
-  <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
-  <link rel="stylesheet" href="assets/dropdown/css/style.css">
-  <link rel="stylesheet" href="assets/theme/css/style.css">
-  <link rel="stylesheet" href="assets/mobirise/css/mbr-additional.css" type="text/css">
-  
-  
-  
+    <meta charset="UTF-8">
+    <title>Vissi d'Arte</title>
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta name="Author" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="js/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="js/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <script src="js/jquery-1.11.3.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/vissi.js"></script>
+    <link href="js/vissi.css" rel="stylesheet" type="text/css" />
 </head>
-<body>
-<section id="menu-0">
-
-    <nav class="navbar navbar-dropdown bg-color transparent navbar-fixed-top">
-        <div class="container">
-
-            <div class="mbr-table">
-                <div class="mbr-table-cell">
-
-                    <div class="navbar-brand">
-                        <a href="https://mobirise.com" class="navbar-logo"><img src="assets/images/logo.png" alt="Mobirise"></a>
-                        <a class="navbar-caption" href="index.html">MOBIRISE</a>
-                    </div>
-
-                </div>
-                <div class="mbr-table-cell">
-
-                    <button class="navbar-toggler pull-xs-right hidden-md-up" type="button" data-toggle="collapse" data-target="#exCollapsingNavbar">
-                        <div class="hamburger-icon"></div>
-                    </button>
-
-                    <ul class="nav-dropdown collapse pull-xs-right nav navbar-nav navbar-toggleable-sm" id="exCollapsingNavbar"><li class="nav-item"><a class="nav-link link" href="lista.html">OVERVIEW</a></li><li class="nav-item dropdown"><a class="nav-link link dropdown-toggle" data-toggle="dropdown-submenu" href="https://mobirise.com/">FEATURES</a><div class="dropdown-menu"><a class="dropdown-item" href="https://mobirise.com/">Mobile friendly</a><a class="dropdown-item" href="https://mobirise.com/">Based on Bootstrap</a><div class="dropdown"><a class="dropdown-item dropdown-toggle" data-toggle="dropdown-submenu" href="https://mobirise.com/">Trendy blocks</a><div class="dropdown-menu dropdown-submenu"><a class="dropdown-item" href="https://mobirise.com/">Image/content slider</a><a class="dropdown-item" href="https://mobirise.com/">Contact forms</a><a class="dropdown-item" href="https://mobirise.com/">Image gallery</a><a class="dropdown-item" href="https://mobirise.com/">Mobile menu</a><a class="dropdown-item" href="https://mobirise.com/">Google maps</a><a class="dropdown-item" href="https://mobirise.com/">Social buttons</a><a class="dropdown-item" href="https://mobirise.com/">Google fonts</a><a class="dropdown-item" href="https://mobirise.com/">Video background</a></div></div><a class="dropdown-item" href="https://mobirise.com/">Host anywhere</a></div></li><li class="nav-item dropdown"><a class="nav-link link dropdown-toggle" data-toggle="dropdown-submenu" href="https://mobirise.com/">HELP</a><div class="dropdown-menu"><a class="dropdown-item" href="http://forums.mobirise.com/">Forum</a><a class="dropdown-item" href="https://mobirise.com/">Tutorials</a><a class="dropdown-item" href="https://mobirise.com/">Contact us</a></div></li><li class="nav-item nav-btn"><a class="nav-link btn btn-white btn-white-outline" href="https://mobirise.com/">DOWNLOAD</a></li></ul>
-                    <button hidden="" class="navbar-toggler navbar-close" type="button" data-toggle="collapse" data-target="#exCollapsingNavbar">
-                        <div class="close-icon"></div>
-                    </button>
-
-                </div>
+<body class="body-padding">
+    <!-- menu - navigation bar -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a href="javascript:scrollto('#splash')">
+                    <img id="logo" title="Vissi d'Arte" src="img/LogoVissi.png" />
+                </a>
             </div>
-
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="navbar-text">Vissi d'Arte</li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <div class="input-group" style="width: 200px; padding-top: 10px;">
+                            <input id="news-search-input" class="form-control" placeholder="Cerca..." type="text">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button" onclick="bnews()"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+                            </span>
+                        </div>
+                    </li>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Portfolio</a></li>
+                    <li><a href="javascript:scrollto('#footer')">Contact</a></li>
+                    <li><a class="siglaut" data-toggle="modal" href="#myModal" title="click to login/logout/change the password">Login</a></li>
+                    <li><a id="online" href="#" title="connected users">0</a></li>
+                    <li class="navbar-text">&nbsp;</li>
+                </ul>
+            </div>
         </div>
     </nav>
-
-</section>
-
-<section class="engine"><a rel="external" href="https://mobirise.com">Mobirise Website Maker</a></section><section class="mbr-section mbr-section-hero mbr-section-full mbr-parallax-background mbr-section-with-arrow mbr-after-navbar" id="header1-1" style="background-image: url(assets/images/jumbotron.jpg);">
-
-    
-
-    <div class="mbr-table-cell">
-
-        <div class="container">
-            <div class="row">
-                <div class="mbr-section col-md-10 col-md-offset-1 text-xs-center">
-
-                    <h1 class="mbr-section-title display-1">FULL SCREEN INTRO</h1>
-                    <p class="mbr-section-lead lead">Click any text to edit or style it. Click blue "Gear" icon in the top right corner to hide/show buttons, text, title and change the block background. <br> Click red "+" in the bottom right corner to add a new block. Use the top left menu to create new pages, sites and add extensions.</p>
-                    <div class="mbr-section-btn"><a class="btn btn-lg btn-primary" href="https://mobirise.com">CLICK TO EDIT</a> <a class="btn btn-lg btn-white btn-white-outline" href="https://mobirise.com">CLICK TO EDIT</a></div>
+    <!-- menu - navigation bar end -->
+    <img id="motto" src="img/motto1.png" />
+    <img id="splash" src="img/splash1.jpg" />
+    <div id="gotop">
+        <button type="button" class="btn btn-default btn-sm" onclick="scrollto('#splash')">
+            <span class="glyphicon glyphicon-triangle-top" aria-hidden="true"></span>
+        </button>
+    </div>
+    <!-- CONTENITORE DELLE NEWS -->
+    <div id="news">
+    </div>
+    <!-- FOOTER non fisso - well serve per sfondo grigio -->
+    <div class="container-fluid well" id="footer">
+        <div class="row">
+            <div class="col-md-4 col-lg-4 col-sm-6">
+                <address>
+                    <strong>VISSI D'ARTE</strong><br />
+                    114 West 81st Street<br />
+                    New York, NY<br />
+                    10024<br />
+                    <abbr title="Phone">Tel:</abbr> (+001) 0000000000<br />
+                    email: <a href="mailto:info@vissidarte.com">info@vissidarte.com</a><br />
+                </address>
+                <address>
+                    <strong>CODICI IBAN</strong><br />
+                    IBAN: IT xx x xxxxx xxxxx 000000004995 (CREDITO VALTELLINESE)<br />
+                </address>
+            </div>
+            <div id="map-container" class="col-md-4 col-lg-4 col-sm-6">
+                <iframe width="100%" height="400" frameborder="0" src="https://www.bing.com/maps/embed/viewer.aspx?v=3&amp;cp=45.453358~9.184531&amp;lvl=17&amp;w=500&amp;h=400&amp;sty=r&amp;typ=d&amp;pp=&amp;ps=&amp;dir=0&amp;mkt=it-it&amp;src=SHELL&amp;form=BMEMJS"></iframe><div style="margin: 12px 0 0 0;"><a target="_blank" href="https://www.bing.com/maps/?cp=45.453358~9.184531&amp;sty=r&amp;lvl=17&amp;sp=&amp;mm_embed=map">Visualizza mappa più grande</a></div>
+            </div>
+            <div class="col-lg-1 col-md-1 col-sm-2 col-xs-3 bollo">
+                <a href="https://www.wagggs.org/en/"><img width="100%" src="img/WAGGGS.svg.png" /></a>
+            </div>
+        </div>
+    </div>
+    <!-- Modal dialog LOGIN -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="MyAccount">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="MyAccount">MY ACCOUNT</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <input class="form-control" id="login" type="text" placeholder="user name" title="Login is needed to access the portfolio.">
+                        <label for="pwd"> </label>
+                        <input class="form-control" id="pwd" type="password" placeholder="password">
+                        <p>
+                            The images on this website are of unique works of art and are the property and copyright of the artists.
+                            By accessing the Portfolio page you agree not to copy any images in whole or in part. Please click to agree to these terms
+                            and input your email and password to access the images.
+                        </p>
+                        <label><input class="form-control" type="checkbox" id="cons1" />I agree</label>
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control" id="oldpwd" type="password" placeholder="old pwd">
+                        <label for="newpwd1"> </label>
+                        <input class="form-control" id="newpwd1" type="password" placeholder="new pwd">
+                        <label for="newpwd2"> </label>
+                        <input class="form-control" id="newpwd2" type="password" placeholder="confirm new pwd">
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control" id="name" type="text" placeholder="name">
+                        <label for="surname"> </label>
+                        <input class="form-control" id="surname" type="text" placeholder="surname">
+                        <label for="email"> </label>
+                        <input class="form-control" id="email" type="text" placeholder="email">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="btnregister" onclick="bregister()">Sign up</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="btnlogin" onclick="blogin()">Login</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="btnlogout" onclick="blogout()">LogOut</button>
+                    <button type="button" class="btn btn-primary" id="bchgpwd" onclick="changepwd(event)">Change Password</button>
+                    <button type="button" class="btn btn-primary" id="dochgpwd" onclick="dochangepwd()">Change</button>
                 </div>
             </div>
         </div>
     </div>
-
-    <div class="mbr-arrow mbr-arrow-floating" aria-hidden="true"><a href="#footer1-2"><i class="mbr-arrow-icon"></i></a></div>
-
-</section>
-
-<footer class="mbr-small-footer mbr-section mbr-section-nopadding" id="footer1-2" style="background-color: rgb(50, 50, 50); padding-top: 1.75rem; padding-bottom: 1.75rem;">
-    
-    <div class="container">
-        <p class="text-xs-center">Copyright (c) 2016 Mobirise.</p>
-    </div>
-</footer>
-
-
-  <script src="assets/web/assets/jquery/jquery.min.js"></script>
-  <script src="assets/tether/tether.min.js"></script>
-  <script src="assets/bootstrap/js/bootstrap.min.js"></script>
-  <script src="assets/smooth-scroll/smooth-scroll.js"></script>
-  <script src="assets/dropdown/js/script.min.js"></script>
-  <script src="assets/touch-swipe/jquery.touch-swipe.min.js"></script>
-  <script src="assets/jarallax/jarallax.js"></script>
-  <script src="assets/theme/js/script.js"></script>
-  
-  
- <div id="scrollToTop" class="scrollToTop mbr-arrow-up"><a style="text-align: center;"><i class="mbr-arrow-up-icon"></i></a></div>
-  </body>
+</body>
 </html>
