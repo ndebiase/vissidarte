@@ -4,3 +4,9 @@ C:\Users\Domenico\documents\visual studio 2015\Projects\vissidarte\vissidarte\bi
 C:\Users\Domenico\documents\visual studio 2015\Projects\vissidarte\vissidarte\bin\vissidarte.pdb
 C:\Users\Domenico\documents\visual studio 2015\Projects\vissidarte\vissidarte\obj\Debug\vissidarte.dll
 C:\Users\Domenico\documents\visual studio 2015\Projects\vissidarte\vissidarte\obj\Debug\vissidarte.pdb
+C:\Users\5atpsgr14\Desktop\vissidarte\vissidarte-master\vissidarte\vissidarte\bin\vissidarte.dll.config
+C:\Users\5atpsgr14\Desktop\vissidarte\vissidarte-master\vissidarte\vissidarte\bin\vissidarte.dll
+C:\Users\5atpsgr14\Desktop\vissidarte\vissidarte-master\vissidarte\vissidarte\bin\vissidarte.pdb
+C:\Users\5atpsgr14\Desktop\vissidarte\vissidarte-master\vissidarte\vissidarte\obj\Debug\vissidarte.csprojResolveAssemblyReference.cache
+C:\Users\5atpsgr14\Desktop\vissidarte\vissidarte-master\vissidarte\vissidarte\obj\Debug\vissidarte.dll
+C:\Users\5atpsgr14\Desktop\vissidarte\vissidarte-master\vissidarte\vissidarte\obj\Debug\vissidarte.pdb

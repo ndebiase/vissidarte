@@ -7,34 +7,45 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Security.Cryptography;
+using System.Net.Mail;
 
 namespace vissidarte
 {
     public partial class ajaxvissi : System.Web.UI.Page
     {
         dbhelper db = new dbhelper();
+        int lingua = 0;
         object cnn, rs;
-        string op;
+        string op, ip, id, tipoid;
         static string
             ordNews = "tipo,ord desc",
             ordUtenti = "cognome,nome",
             ordTabelle = "tip,cod,des",
-            tipoStringa = " tagid cognome nome classe login info note tip cod des pwd lastaccess coord rappst rappge doc materia aula link tit txt col img href dtpub dtexp op ";
+            tipoStringa = " tagid cognome nome classe login info note tip cod des pwd lastaccess tit tags txt tema img href dtpub dtexp op ";
         string[]
-            tabNews = { ordNews, "id", "tipo", "tit", "txt", "img", "href", "ord", "col", "dtpub", "dtexp", "op" },
+            tabNews = { ordNews, "id", "tipo", "tit", "tags", "txt", "img", "href", "ord", "ll", "tema", "dtpub", "dtexp", "op" },
             tabUtenti = { ordUtenti, "id", "tagid", "login", "pwd", "tipo", "accessi", "lastaccess", "cognome", "nome", "note", "info" },
             tabTabelle = { ordTabelle, "id", "tip", "cod", "des", "info" };
         Hashtable tabs = new Hashtable();
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (Session["id"] != null)
+            {
+                id = Session["id"].ToString();
+                // 0=pubblico, 1=utente con privilegi, 10=redattore, 30=amministratore
+                tipoid = Session["tipoid"].ToString();
+            }
             if (!Page.IsPostBack)
             {
                 tabs.Add("utenti", tabUtenti);
                 tabs.Add("tabelle", tabTabelle);
                 tabs.Add("news", tabNews);
 
+                ip = Request.UserHostAddress;
+                // parametro obbligatorio: op
                 op = Request["op"];
+
                 if (op != null)
                 {
                     if (op == "0")
@@ -44,28 +55,38 @@ namespace vissidarte
                     else if (op == "2")
                         Logout();
                     else if (op == "3")
-                        ChangePWD(Request["a"], Request["b"], Request["b2"]);
-                    else if (op == "4")
+                        ChangePWD(Request["b"], Request["b2"]);
+                    else if (op == "4" && id != null)
                         reportTabelle();
-                    else if (op == "5")
+                    else if (op == "5" && id != null)
                         setTabella();
                     else if (op == "6")
                         deleteRiga();
-                    else if (op == "7")
+                    else if (op == "7" && id != null)
                         insertRiga();
                     else if (op == "8")
                         updateRiga();
-                    else if (op == "9")
+                    else if (op == "9" && id != null)
                         importaUtente();
                     else if (op == "10")
                         esportaUtenti();
                     else if (op == "11")
                         ListaTiponews();
-                    else if (op == "15")
+                    else if (op == "13")
                         deleteTabFrontiera();
+                    //else if (op == "14")
+                    //    getAccount();
+                    //else if (op == "15")
+                    //    removeAccount();
+                    //else if (op == "17")
+                    //    saveAccount();
+                    else if (op == "24")
+                        regAccount();
+                    else if (op == "25")
+                        resetPWD(Request["e"].ToLower());
                     else
                     {
-                        Rispondi("{ err: \"Invalid op.\" }");
+                        Rispondi("{ err: \"Invalid op or login required.\" }");
                     }
                 }
                 else
@@ -124,7 +145,7 @@ namespace vissidarte
                         // questo consente di mantenere l'autenticazione nella versione PC
                         Session["tipoid"] = db.gets(rs, "tipo");
                         Session["id"] = db.gets(rs, "id");
-                        qq = db.gets(rs, "info").Split(';');
+                        qq = db.gets(rs, "info").Split('|');
                         if (qq.Length > 4)
                             Session["abil"] = abi = qq[4];
                         json = "{id:" + db.gets(rs, "id") + ",abi:\"" + abi + "\",tipo:" + db.gets(rs, "tipo") + ",nome:\"" + db.bonifica(db.gets(rs, "cognome")) + " " + db.bonifica(db.gets(rs, "nome")) + "\"}";
@@ -142,13 +163,13 @@ namespace vissidarte
                 json = "{ err:\"" + db.bonificajson(db.LastErr) + "\"}";
             Rispondi(json);
         }
-        protected void ChangePWD(string login, string pwd, string pwd2)
+        protected void ChangePWD(string pwd, string pwd2)
         {
             string sql, epwd, epwdn, json = "{}";
             char[] vietati = { ' ', '\'' };
             int ret = 0;
 
-            if (Session["id"] != null)
+            if (id != null)
             {
                 if ((cnn = db.InitConnection(null)) != null)
                 {
@@ -158,8 +179,8 @@ namespace vissidarte
                     //
                     epwd = db.encrypt(rij, pwd);
                     epwdn = db.encrypt(rij, pwd2);
-                    sql = "update " + db.tb("utenti") + " set pwd='" + epwdn + "' where login='" + login + "' and pwd='" + epwd + "'";
-                    if (login.IndexOfAny(vietati) < 0 && pwd.IndexOfAny(vietati) < 0)
+                    sql = "update " + db.tb("utenti") + " set pwd='" + epwdn + "' where id=" + id + "' and pwd='" + epwd + "'";
+                    if (pwd.IndexOfAny(vietati) < 0)
                         ret = db.RunSQL(sql, cnn);
                 }
                 db.CloseConnection(cnn);
@@ -171,6 +192,147 @@ namespace vissidarte
             else
                 json = "{ err:\"Sessione scaduta o login non effettuato.\"}";
             Rispondi(json);
+        }
+        /// <summary>
+        /// resetta la password
+        /// </summary>
+        /// <param name="email"></param>
+        void resetPWD(string email)
+        {
+            string pwd, msg, ret, epwd, nome, sql, json = "{}", err = "";
+            char[] vietati = { ' ', '\'' };
+
+            if (email.IndexOfAny(vietati) >= 0 || !email.Contains("@") || !email.Contains("."))
+                err = "Email is invalid";
+            if (err == "")
+            {
+                cnn = db.InitConnection();
+                if (cnn != null)
+                {
+                    sql = "select * from " + db.tb("utenti") + " where login='" + email + "'";
+                    rs = db.RunSQLrs(sql, cnn);
+                    if (db.Read(rs))
+                    {
+                        id = db.gets(rs, "id");
+                        nome = db.gets(rs, "nome");
+                        db.Close(rs);
+                        RijndaelManaged rij = (RijndaelManaged)db.getrij();
+                        //
+                        // cifra la password
+                        //
+                        Random r = new Random();
+                        pwd = r.Next(10000, 99999).ToString();
+                        epwd = db.encrypt(rij, pwd);
+                        sql = "update " + db.tb("utenti") + " set pwd='" + epwd + "' where id=" + id;
+                        db.RunSQL(sql, cnn);
+                        if (db.LastErr != null)
+                            err = db.LastErr;
+                        // crea il messaggio di risposta
+                        msg = getMessage(cnn, "msg68").Replace("#br", "\n").Replace("#name", nome).Replace("#email", email).Replace("#pwd", pwd);
+                        ret = mysend(msg, ConfigurationManager.AppSettings["CSUBJECT"], email, null);
+                        if (ret != null)
+                            err = ret;
+                    }
+                    else
+                        err = "the email address is not registered.";
+                }
+                else
+                    err = "database connection error.";
+                db.CloseConnection(cnn);
+            }
+            if (err != "")
+                json = "{ err: \"" + db.bonificajson(err) + "\"}";
+            Rispondi(json);
+        }
+        /// <summary>
+        /// registra un nuovo account
+        /// </summary>
+        void regAccount()
+        {
+            string pwd, msg, ret, epwd, cognome, nome, email, sql, json = "{}", err = "";
+            char[] vietati = { ' ', '\'' };
+
+            cognome = Request["a[co]"];
+            nome = Request["a[no]"];
+            email = Request["a[e]"].ToLower();
+            if (email.IndexOfAny(vietati) >= 0 || !email.Contains("@") || !email.Contains("."))
+                err = "Email is invalid";
+            if (err == "")
+            {
+                cnn = db.InitConnection();
+                if (cnn != null)
+                {
+                    db.Close(rs);
+                    RijndaelManaged rij = (RijndaelManaged)db.getrij();
+                    //
+                    // cifra la password
+                    //
+                    Random r = new Random();
+                    pwd = r.Next(10000, 99999).ToString();
+                    epwd = db.encrypt(rij, pwd);
+                    sql = "insert into " + db.tb("utenti") + " (id,tagid,login,pwd,tipo,accessi,lastaccess,cognome,nome,note,info) values (" +
+                        "0,'','" +
+                        email.Trim() + "','" +
+                        epwd + "'," +
+                        "0,0,now(),'" +
+                        db.bonifica(cognome) + "','" +
+                        db.bonifica(nome) + "','',''" +
+                        ")";
+                    db.RunSQL(sql, cnn);
+                    if (db.LastErr != null)
+                        err = db.LastErr + "(The account already exists. Please type a different email address).";
+                    else
+                    {
+                        // crea il messaggio di risposta
+                        msg = getMessage(cnn, "msg68").Replace("#br", "\n").Replace("#name", nome).Replace("#email", email).Replace("#pwd", pwd);
+                        ret = mysend(msg, ConfigurationManager.AppSettings["CSUBJECT"], email, null);
+                        if (ret != null)
+                            err = ret;
+                    }
+                }
+                else
+                    err = "database connection error.";
+                db.CloseConnection(cnn);
+            }
+            if (err != "")
+                json = "{ err: \"" + db.bonificajson(err) + "\"}";
+            Rispondi(json);
+        }
+        /// <summary>
+        /// ritorna un messaggio. la connessione deve essere aperta
+        /// </summary>
+        /// <param name="cnn"></param>
+        /// <param name="msg"></param>
+        /// <returns></returns>
+        string getMessage(object cnn, string msg)
+        {
+            string ret = "", sql = "select * from " + db.tb("tabelle") + " where tip='MENU' and cod='" + msg + "'";
+            rs = db.RunSQLrs(sql, cnn);
+            if (db.Read(rs))
+                ret = li(db.gets(rs, "info").Split('|')[0]);
+            db.Close(rs);
+            return ret;
+        }
+        /// <summary>
+        /// Restituisce la parte del messaggio in base alla lingua. Il messaggio può essere composto da più stringhe separate da @
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <returns></returns>
+        string li(string msg)
+        {
+            string[] qq = msg.Split('@');
+            if (lingua < qq.Length)
+                return qq[lingua];
+            else
+                return qq[0];
+        }
+        string li(string msg, int lingua)
+        {
+            string[] qq = msg.Split('@');
+            if (lingua < qq.Length)
+                return qq[lingua];
+            else
+                return qq[0];
         }
         protected void reportTabelle()
         {
@@ -624,15 +786,15 @@ namespace vissidarte
                 if (news == "-1")
                 {
                     if (src == "")
-                        sql = "SELECT n.alt, n.tags, n.tit, n.txt, n.img, n.dtpub, t.des from " + db.tb("news") + " n," + db.tb("tabelle") + " t where n.tipo=t.cod and t.tip='NEWS' and n.tipo=0 and now() >= n.dtpub and now() <= n.dtexp order by n.ord desc";
+                        sql = "SELECT n.tags, n.tit, n.txt, n.ll, n.tema, n.href, n.img, n.dtpub, t.des from " + db.tb("news") + " n," + db.tb("tabelle") + " t where n.tipo=t.cod and t.tip='NEWS' and n.tipo=0 and now() >= n.dtpub and now() <= n.dtexp order by n.ord desc";
                     else
-                        sql = "SELECT n.alt, n.tags, n.tit, n.txt, n.img, n.dtpub, t.des from " + db.tb("news") + " n," + db.tb("tabelle") + " t " +
+                        sql = "SELECT n.tags, n.tit, n.txt, n.ll, n.tema, n.href, n.img, n.dtpub, t.des from " + db.tb("news") + " n," + db.tb("tabelle") + " t " +
                             "where n.tipo=t.cod and t.tip='NEWS' and now() >= n.dtpub and now() <= n.dtexp and " +
-                            "(n.tit like '%" + src + "%' or n.txt like '%" + src + "%') " +
+                            "(n.tit like '%" + src + "%' or n.txt like '%" + src + "%' or n.tags like '%" + src + "%') " +
                             "order by t.des, n.ord desc";
                 }
                 else
-                    sql = "SELECT n.alt, n.tags, n.tit, n.txt, n.img, n.dtpub, t.des from " + db.tb("news") + " n," + db.tb("tabelle") + " t where n.tipo=t.cod and t.tip='NEWS' and n.tipo=" + news + " and now() >= n.dtpub and now() <= n.dtexp order by n.ord desc";
+                    sql = "SELECT n.tags, n.tit, n.txt, n.ll, n.tema, n.href, n.img, n.dtpub, t.des from " + db.tb("news") + " n," + db.tb("tabelle") + " t where n.tipo=t.cod and t.tip='NEWS' and n.tipo=" + news + " and now() >= n.dtpub and now() <= n.dtexp order by n.ord desc";
                 rs = db.RunSQLrs(sql, cnn);
                 while (rs != null && db.Read(rs))
                 {
@@ -642,7 +804,9 @@ namespace vissidarte
                         "dt:\"" + db.gets(rs, "dtpub").Substring(0, 10) + "\"," +
                         "tit:\"" + db.bonificajson(db.gets(rs, "tit")) + "\"," +
                         "txt:\"" + db.bonificajson(db.gets(rs, "txt")) + "\"," +
-                        "alt:\"" + db.gets(rs, "alt") + "\"},";
+                        "th:\"" + db.bonificajson(db.gets(rs, "tema")) + "\"," +
+                        "ll:\"" + db.bonificajson(db.gets(rs, "ll")) + "\"," +
+                        "href:\"" + db.gets(rs, "href") + "\"},";
                 }
                 db.Close(rs);
                 list += "]";
@@ -654,7 +818,7 @@ namespace vissidarte
                     if (rs != null && db.Read(rs))
                     {
                         string[] qq;
-                        qq = db.gets(rs, "info").Split(';');
+                        qq = db.gets(rs, "info").Split('|');
                         if (qq.Length > 4)
                             abi = qq[4];
                         user = "utente: {id:" + db.gets(rs, "id") + ",abi:\"" + abi + "\",tipo:" + db.gets(rs, "tipo") + ",nome:\"" + db.bonifica(db.gets(rs, "cognome")) + " " + db.bonifica(db.gets(rs, "nome")) + "\"}";
@@ -669,7 +833,63 @@ namespace vissidarte
                 json = "{online:\"" + Application["AccessiContemporanei"].ToString() + "\",title:\"" + titolo + "\"," + list + "," + user + "}";
             Rispondi(json);
         }
+        /// <summary>
+        /// invio email
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="subject"></param>
+        /// <param name="addr"></param>
+        /// <param name="emadistributor"></param>
+        /// <returns></returns>
+        protected string mysend(string text, string subject, string addr, string emadistributor)
+        {
+            string ret = null,
+                enableSSL = ConfigurationManager.AppSettings["ENABLESSL"],
+                login = ConfigurationManager.AppSettings["LOGIN"],
+                pwd = ConfigurationManager.AppSettings["PASSWORD"],
+                sport = ConfigurationManager.AppSettings["SMTPPORT"],
+                chost = ConfigurationManager.AppSettings["CHOST"],
+                caddress = ConfigurationManager.AppSettings["CADDRESS"],
+                cdispname = ConfigurationManager.AppSettings["CDISPNAME"];
 
+            if (addr == null)
+                addr = ConfigurationManager.AppSettings["SAMPLEADDR"];
+            try
+            {
+                MailMessage mm = new MailMessage();
+                SmtpClient smtp = new SmtpClient(chost);
+                if (sport != "")
+                    smtp.Port = Convert.ToInt32(sport);
+                if (login != "")
+                {
+                    smtp.Credentials = new System.Net.NetworkCredential(login, pwd);
+                    if (enableSSL != "")
+                        smtp.EnableSsl = true;
+                }
+                if (emadistributor != null && emadistributor != "")
+                {
+                    mm.To.Add(emadistributor);
+                    mm.CC.Add(addr);
+                }
+                else
+                    mm.To.Add(addr);
+                //mm.Bcc.Add("ndebiase@intres.it");
+                mm.From = new MailAddress(caddress, cdispname);
+                mm.Subject = subject;
+                mm.IsBodyHtml = false;
+                mm.Body = text;
+                smtp.Send(mm);
+            }
+            catch (Exception ex)
+            {
+                ret = ex.Message;
+            }
+            return ret;
+        }
+        /// <summary>
+        /// prepara la risposta http con json
+        /// </summary>
+        /// <param name="json"></param>
         void Rispondi(string json)
         {
             Response.Clear();

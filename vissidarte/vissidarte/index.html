@@ -10,6 +10,7 @@
     <link href="js/font-awesome.min.css" rel="stylesheet" type="text/css">
     <script src="js/jquery-1.11.3.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
+    <script src="js/masonry.pkgd.min.js"></script>
     <script src="js/vissi.js"></script>
     <link href="js/vissi.css" rel="stylesheet" type="text/css" />
 </head>
@@ -41,8 +42,8 @@
                             </span>
                         </div>
                     </li>
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">Portfolio</a></li>
+                    <li><a href="javascript:scrollto('#splash')">Home</a></li>
+                    <li><a href="javascript:bnews(0)">Portfolio</a></li>
                     <li><a href="javascript:scrollto('#footer')">Contact</a></li>
                     <li><a class="siglaut" data-toggle="modal" href="#myModal" title="click to login/logout/change the password">Login</a></li>
                     <li><a id="online" href="#" title="connected users">0</a></li>
@@ -60,7 +61,10 @@
         </button>
     </div>
     <!-- CONTENITORE DELLE NEWS -->
-    <div id="news">
+    <div class="container-fluid sfondonews">
+        <a name="areanews"></a>
+        <div class="mygrid" id="news">
+        </div>
     </div>
     <!-- FOOTER non fisso - well serve per sfondo grigio -->
     <div class="container-fluid well" id="footer">
@@ -83,7 +87,9 @@
                 <iframe width="100%" height="400" frameborder="0" src="https://www.bing.com/maps/embed/viewer.aspx?v=3&amp;cp=45.453358~9.184531&amp;lvl=17&amp;w=500&amp;h=400&amp;sty=r&amp;typ=d&amp;pp=&amp;ps=&amp;dir=0&amp;mkt=it-it&amp;src=SHELL&amp;form=BMEMJS"></iframe><div style="margin: 12px 0 0 0;"><a target="_blank" href="https://www.bing.com/maps/?cp=45.453358~9.184531&amp;sty=r&amp;lvl=17&amp;sp=&amp;mm_embed=map">Visualizza mappa più grande</a></div>
             </div>
             <div class="col-lg-1 col-md-1 col-sm-2 col-xs-3 bollo">
+                <!--
                 <a href="https://www.wagggs.org/en/"><img width="100%" src="img/WAGGGS.svg.png" /></a>
+                -->
             </div>
         </div>
     </div>
@@ -96,37 +102,47 @@
                     <h4 class="modal-title" id="MyAccount">MY ACCOUNT</h4>
                 </div>
                 <div class="modal-body">
-                    <div class="form-group">
+                    <div class="form-group" id="formlogin">
+                        <label for="login">user name:</label>
                         <input class="form-control" id="login" type="text" placeholder="user name" title="Login is needed to access the portfolio.">
-                        <label for="pwd"> </label>
+                        <label for="pwd">password</label>
                         <input class="form-control" id="pwd" type="password" placeholder="password">
-                        <p>
+                        <label for="cons1">
                             The images on this website are of unique works of art and are the property and copyright of the artists.
                             By accessing the Portfolio page you agree not to copy any images in whole or in part. Please click to agree to these terms
                             and input your email and password to access the images.
-                        </p>
-                        <label><input class="form-control" type="checkbox" id="cons1" />I agree</label>
+                        </label>
+                        <div class="checkbox"><label><input type="checkbox" id="cons1" />I agree</label></div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" id="formchgpwd">
+                        <label for="oldpwd">old password:</label>
                         <input class="form-control" id="oldpwd" type="password" placeholder="old pwd">
-                        <label for="newpwd1"> </label>
+                        <label for="newpwd1">new password:</label>
                         <input class="form-control" id="newpwd1" type="password" placeholder="new pwd">
-                        <label for="newpwd2"> </label>
+                        <label for="newpwd2">confirm new password:</label>
                         <input class="form-control" id="newpwd2" type="password" placeholder="confirm new pwd">
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" id="formreg">
+                        <label for="name">name:</label>
                         <input class="form-control" id="name" type="text" placeholder="name">
-                        <label for="surname"> </label>
+                        <label for="surname">surname:</label>
                         <input class="form-control" id="surname" type="text" placeholder="surname">
-                        <label for="email"> </label>
+                        <label for="email">email (this will be your user name):</label>
                         <input class="form-control" id="email" type="text" placeholder="email">
+                    </div>
+                    <div class="form-group" id="formforgot">
+                        <label for="email">type the email that was used in Sign up:</label>
+                        <input class="form-control" id="email1" type="text" placeholder="email">
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="btnregister" onclick="bregister()">Sign up</button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="btnlogin" onclick="blogin()">Login</button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="btnlogout" onclick="blogout()">LogOut</button>
-                    <button type="button" class="btn btn-primary" id="bchgpwd" onclick="changepwd(event)">Change Password</button>
+                    <button type="button" class="btn btn-primary" id="bforgotpwd" onclick="forgotpwd()">I forgot the password</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="bresetpwd" onclick="resetpwd()">Reset password</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="bnewaccount" onclick="bnewaccount()">Register</button>
+                    <button type="button" class="btn btn-primary" id="bregister" onclick="bregister()">Sign up</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="blogin" onclick="blogin()">Login</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="blogout" onclick="blogout()">LogOut</button>
+                    <button type="button" class="btn btn-primary" id="bchgpwd" onclick="changepwd()">Change Password</button>
                     <button type="button" class="btn btn-primary" id="dochgpwd" onclick="dochangepwd()">Change</button>
                 </div>
             </div>

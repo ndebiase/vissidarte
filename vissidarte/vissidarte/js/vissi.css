@@ -1,160 +1,88 @@
-body {
-    padding: 0;
-    margin: 0;
-    font-family: Arial;
-    /*background-image: url("img/bg.png");*/
-    background: url("../img/bg0.jpg") repeat;
+body-padding {
+    padding-top: 57px;
 }
 
-.logo {
+#logo {
     width: 50px;
 }
 
-.pageContainer {
-    min-width: 430px;
-}
-
-.header {
-    background-color: #000049;
-    border-bottom-style: solid;
-    border-bottom-color: #AB0000;
-    border-bottom-width: 3px;
+#splash {
     width: 100%;
-    height: 85px;
-    padding-top: 23px;
 }
 
-.textheader {
-    text-align: center;
-    color: white;
-    font-size: 22pt;
-    font-weight: bold;
-}
-
-.menuOption {
-    background-color: #000049;
-    float: left;
-    height: 40px;
-    width: 14.55%;
-    margin: 15 0 0 15px;
-}
-
-.titoloTendina {
-    font-size: 16pt;
-    text-align: center;
-    color: white;
-}
-
-
-a:visited {
-    text-decoration: none;
-    color: black;
-}
-
-a:hover {
-    text-decoration: none;
-}
-
-
-.contentContainer {
+#splashsotto {
     width: 100%;
-    height: 600px;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: -2;
+    opacity: 0.3;
 }
 
-.eventi {
-    margin-top: 100px;
-    text-align: center;
-    width: 95%;
-    font-family: Arial;
-    font-size: 18pt;
-    color: white;
+#motto {
+    display:none;
+    width: 25%;
+    position: absolute;
+    top: 100px;
+    left: 20px;
 }
 
-.footer {
-    background-color: rgba(80, 123, 175, 0.13);
-    border-top-style: solid;
-    border-top-color: rgba(43, 99, 148, 0.69);
-    border-top-width: 1px;
+#gotop {
     width: 100%;
-    color: rgb(74, 73, 73);
+    position: fixed;
+    bottom: 50px;
+    text-align: center;
+    z-index: 1;
 }
 
-/*
-.footer{
-    background-color: #000049; 
-    border-top-style:solid;
-    border-top-color:#AB0000; 
-    border-top-width:3px;
+    #gotop button {
+        background-color: transparent;
+        color: red;
+    }
+
+.page-header {
+    color: #88161e;
+}
+
+.bollo {
+    padding: 4px;
+}
+
+.mygrid {
+    margin: 0 auto;
+}
+
+.myitem {
+    margin-bottom: 20px;
+    margin-right: 20px;
+}
+
+.myimg {
     width:100%;
-    color:white;
 }
 
-.doveSiamoContainer{
-    height:80px;
-    font-size: 10pt;
-    margin: 20px 0px 0px 50px;
-    line-height: 25px;
-    width: 150px;
-    float:left;
+.sfondonews {
+    background-color: #fff;
 }
 
-.contattaciContainer{
-    height:80px;
-    font-size: 10pt;
-    margin: 20px 0px 0px 50px;
-    line-height: 25px;
-    width: 150px;
-    float:left;
+.r, .r1 {
+    border: 1px solid gray;
+    -moz-border-radius: 20px;
+    border-radius: 20px;
 }
 
-*/
-.facebookLink {
-    width: 100px;
-    height: 30px;
-    float: left;
-    margin: 35px 0 0 0;
-    text-align: center;
-    background-image: url(/baden/img/facebook.jpg);
-    background-repeat: no-repeat;
-    border-radius: 5px;
+.s, .s1 {
+    border: 1px solid gray;
 }
 
-
-.text {
-    font-size: 8pt;
-    line-height: 15px;
+.c1 {
+    background-color: lightgray;
 }
 
-.sideMenu {
-    height: 500px;
-    margin: 30px;
-    background: yellow;
-    float: left;
+.c2 {
+    background-color: lightyellow;
 }
 
-.content {
-    height: 500px;
-    background: red;
-    float: left;
-}
-
-.facebookLink:hover {
-    cursor: pointer;
-}
-
-.resources_icon {
-    width: 50px;
-}
-
-.container {
-    float: right;
-    margin: 5px;
-}
-
-.tabella {
-    padding-left: 10px;
-}
-
-.referencesSites {
-    max-width: 430px;
+.c3 {
+    background-color: ivory;
 }
