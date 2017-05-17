@@ -86,3 +86,22 @@ body-padding {
 .c3 {
     background-color: ivory;
 }
+
+@media (max-width:767px) {
+    .navbar-default .navbar-nav > li {
+        padding: 10px;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    div.input-group {
+        width: 100% !important;
+    }
+}
+
+#footer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin-bottom: 0;
+}
