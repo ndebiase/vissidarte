@@ -86,7 +86,7 @@ function scrollto(id) {
     $("html,body").animate({ scrollTop: aTag.offset().top - SES.headerwidth }, 'slow');
 }
 function showDetails(k) {
-    alert("show detail N." + k);
+    $('#myDetailsModal').modal({});
 }
 // inietta le news richieste nella pagina web
 function bnews(tipo, noscroll) {
