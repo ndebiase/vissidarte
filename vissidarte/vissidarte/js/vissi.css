@@ -1,9 +1,10 @@
-body-padding {
-    padding-top: 57px;
+@font-face {
+    font-family: bodoni;
+    src: url(/fonts/BodoniW01Poster.ttf);
 }
 
-#logo {
-    width: 50px;
+body-padding {
+    padding-top: 57px;
 }
 
 #splash {
@@ -97,6 +98,11 @@ body-padding {
     div.input-group {
         width: 100% !important;
     }
+
+    #logo {
+        padding-left: 20px;
+    }
+
 }
 
 #footer {
@@ -108,4 +114,6 @@ body-padding {
 
 #logo {
     color: rgb(235, 54, 54);
+    font-family: bodoni;
+    font-size:22px;
 }
