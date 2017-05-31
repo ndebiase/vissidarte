@@ -155,13 +155,16 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-xs-12 col-md-8"></div>
-                        <div class="col-xs-6 col-md-4"></div>
+                        <div class="col-xs-12 col-md-8"><img id="modalImage"/></div>
+                        <div class="col-xs-6 col-md-4">
+                            <span class="modalTitle"></span>
+                            <p id="imgDesc"></p>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                        <button type="button" class="btn btn-default" onclick="bnext()">next</button>
-                        <button type="button" class="btn btn-default" onclick="bprevious()">previous</button>
+                        <button type="button" class="btn btn-default" id="previous">previous</button>
+                        <button type="button" class="btn btn-default" id="next">next</button>
                         <button type="button" class="btn btn-default" onclick="fullscreen()">fullscreen</button>
                     </div>
                 </div>
