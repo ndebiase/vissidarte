@@ -85,8 +85,20 @@ function scrollto(id) {
     var aTag = $(id);
     $("html,body").animate({ scrollTop: aTag.offset().top - SES.headerwidth }, 'slow');
 }
-function showDetails(k) {
+function showDetails(k) {//k numero immagine
     $('#myDetailsModal').modal({});
+    $('#modalImage').attr("src", SES.news[k].img);
+    $('span.modalTitle').text(SES.news[k].tit);
+    $('p#imgDesc').text(SES.news[k].txt);
+    $('#previous').click(function() {
+        showDetails(k - 1);
+    });
+    $('#next').click(function () {
+        showDetails(k + 1);
+    });
+    //$('#previous').attr('onclick', bprevious(k));
+    console.log(SES.news[k]);
+    console.log(k);
 }
 // inietta le news richieste nella pagina web
 function bnews(tipo, noscroll) {

@@ -117,3 +117,11 @@ body-padding {
     font-family: bodoni;
     font-size:22px;
 }
+
+#modalImage{
+    width: 100%;
+}
+
+.modalTitle {
+    font-size: 30px;
+}
