@@ -86,17 +86,24 @@ function scrollto(id) {
     $("html,body").animate({ scrollTop: aTag.offset().top - SES.headerwidth }, 'slow');
 }
 function showDetails(k) {//k numero immagine
+    console.log(k);
     $('#myDetailsModal').modal({});
     $('#modalImage').attr("src", SES.news[k].img);
     $('span.modalTitle').text(SES.news[k].tit);
     $('p#imgDesc').text(SES.news[k].txt);
-    $('#previous').click(function() {
-        showDetails(k - 1);
-    });
-    $('#next').click(function () {
-        showDetails(k + 1);
-    });
-    //$('#previous').attr('onclick', bprevious(k));
+    var p, s;
+    if (k == 0)
+        p = k = SES.news.length - 1;
+    else
+        p = k - 1;
+    if (k == SES.news.length - 1)
+        s = 0;
+    else
+        s = k + 1;
+    $('#imageButton').empty();
+    $('#imageButton').append('<button type="button" class="btn btn-default" onclick="javascript:showDetails(' + p + ')">previous</button>');
+    $('#imageButton').append('<button type="button" class="btn btn-default" onclick="javascript:showDetails(' + s + ')">next</button>');
+    $('#imageButton').append('<button type="button" class="btn btn-default" onclick="fullscreen()">fullscreen</button>');
     console.log(SES.news[k]);
     console.log(k);
 }
