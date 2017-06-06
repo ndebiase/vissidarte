@@ -104,13 +104,9 @@ function showDetails(k) {//k numero immagine
     $('#imageButton').append('<button type="button" class="btn btn-default" onclick="javascript:showDetails(' + p + ')">previous</button>');
     $('#imageButton').append('<button type="button" class="btn btn-default" onclick="javascript:showDetails(' + s + ')">next</button>');
     $('#imageButton').append('<button type="button" class="btn btn-default" onclick="fullscreen()">fullscreen</button>');
-    $('#imageButton').append('<img alt="' + SES.news[k].alt + '" src="data/' + SES.news[k].img + '" id="modalImage" style="position:fixed;z-index:-10;opacity:0;"/>');
-    console.log(SES.news[k]);
-    console.log(k);
+    $('#imageButton').append('<img alt="' + SES.news[k].alt + '" src="' + SES.news[k].img + '" id="modalImage" style="position:fixed;z-index:-10;opacity:0;top: 0;right: 0;"/>');
 }
 function fullscreen() {
-    $('#imageButton img').css('opacity', '1');
-    $('#imageButton img').css('z-index', '1052');
 }
 
 // inietta le news richieste nella pagina web
