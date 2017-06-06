@@ -85,8 +85,7 @@ function scrollto(id) {
     var aTag = $(id);
     $("html,body").animate({ scrollTop: aTag.offset().top - SES.headerwidth }, 'slow');
 }
-function showDetails(k) {//k numero immagine
-    console.log(k);
+function showDetails(k) {
     $('#myDetailsModal').modal({});
     $('#modalImage').attr("src", SES.news[k].img);
     $('span.modalTitle').text(SES.news[k].tit);
@@ -164,10 +163,10 @@ function bnews(tipo, noscroll) {
                         href = "javascript:showDetails(" + k + ")";
                         htm += "<div class='" + setlargclass(SES.news[k].ll, SES.news[k].th) + "'>" +
                             "<div class='media'>";
-                        // se c'è l'immagine la mette
+                        // se c'Ã¨ l'immagine la mette
                         if (SES.news[k].img != '' && SES.news[k].img != null) {
                             htm += "<div>";
-                            // se c'è anche un href lo abbina all'immagine
+                            // se c'Ã¨ anche un href lo abbina all'immagine
                             if (href != "")
                                 htm += "<a href='" + href + "'>";
                             htm += "<img class='myimg' src='" + SES.news[k].img + "' title='" + SES.news[k].tit + "' />";
