@@ -118,10 +118,31 @@ body-padding {
     font-size:22px;
 }
 
-#modalImage{
-    width: 100%;
-}
-
 .modalTitle {
     font-size: 30px;
 }
+
+#fullScreen {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    z-index: 2000;
+    display: none;
+    background-color: rgba(21, 24, 27, 0.72);
+    opacity:0;
+}
+
+    #fullScreen img {
+        height: 100%;
+        display: block;
+        margin: auto;
+    }
+
+    #fullScreen button {
+        position: absolute;
+        right: 20px;
+        font-size: 80px;
+        color: white;
+        opacity: 1;
+    }
