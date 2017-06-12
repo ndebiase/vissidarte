@@ -49,7 +49,7 @@ namespace vissidarte
                 if (op != null)
                 {
                     if (op == "0")
-                        GetNews(Request["news"], Request["src"], Request["id"]);
+                        GetNews(Request["news"], Request["src"]);
                     else if (op == "1")
                         Authenticate(Request["a"], Request["b"]);
                     else if (op == "2")
@@ -76,8 +76,8 @@ namespace vissidarte
                         deleteTabFrontiera();
                     //else if (op == "14")
                     //    getAccount();
-                    //else if (op == "15")
-                    //    removeAccount();
+                    else if (op == "15")
+                        removeAccount();
                     //else if (op == "17")
                     //    saveAccount();
                     else if (op == "24")
@@ -111,9 +111,11 @@ namespace vissidarte
         }
         protected void Authenticate(string login, string pwd)
         {
-            char[] vietati = { ' ', '\'' };
+            int k;
+            char[] vietati = { ' ', '\'' }, septags = { ' ', ',', '.', ';' };
             string sql, epwd, json = "{}";
             string[] qq;
+            Hashtable t = new Hashtable();
 
             Session["tipoid"] = null;
             //
@@ -148,13 +150,30 @@ namespace vissidarte
                         qq = db.gets(rs, "info").Split('|');
                         if (qq.Length > 4)
                             Session["abil"] = abi = qq[4];
-                        json = "{id:" + db.gets(rs, "id") + ",abi:\"" + abi + "\",tipo:" + db.gets(rs, "tipo") + ",nome:\"" + db.bonifica(db.gets(rs, "cognome")) + " " + db.bonifica(db.gets(rs, "nome")) + "\"}";
+                        json = "{utente:{id:" + db.gets(rs, "id") + ",abi:\"" + abi + "\",tipo:" + db.gets(rs, "tipo") + ",nome:\"" + db.bonifica(db.gets(rs, "cognome")) + " " + db.bonifica(db.gets(rs, "nome")) + "\"}";
                         db.Close(rs);
                         // aggiorna i dati di log
                         conta++;
                         sql = "update " + db.tb("utenti") + " set accessi=" + conta.ToString() + " ,lastaccess='" +
                             DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss") + "' where id=" + Session["id"];
                         db.RunSQL(sql, cnn);
+                        // lettura dei tags
+                        sql = "SELECT distinct tags from " + db.tb("news") + " where tipo=0 and now() >= dtpub and now() <= dtexp";
+                        rs = db.RunSQLrs(sql, cnn);
+                        while (rs != null && db.Read(rs))
+                        {
+                            qq = db.gets(rs, "tags").Split(septags);
+                            for (k = 0; k < qq.Length; k++)
+                            {
+                                if (qq[k] != "" && !t.Contains(qq[k]))
+                                    t.Add(qq[k], 1);
+                            }
+                        }
+                        db.Close(rs);
+                        json += ",tags:[";
+                        foreach (string key in t.Keys)
+                            json += "'" + key + "',";
+                        json += "]}";
                     }
                 }
                 db.CloseConnection(cnn);
@@ -179,7 +198,7 @@ namespace vissidarte
                     //
                     epwd = db.encrypt(rij, pwd);
                     epwdn = db.encrypt(rij, pwd2);
-                    sql = "update " + db.tb("utenti") + " set pwd='" + epwdn + "' where id=" + id + "' and pwd='" + epwd + "'";
+                    sql = "update " + db.tb("utenti") + " set pwd='" + epwdn + "' where id=" + id + " and pwd='" + epwd + "'";
                     if (pwd.IndexOfAny(vietati) < 0)
                         ret = db.RunSQL(sql, cnn);
                 }
@@ -187,10 +206,10 @@ namespace vissidarte
                 if (db.LastErr != null)
                     json = "{ err:\"" + db.bonificajson(db.LastErr) + "\"}";
                 else if (ret != 1)
-                    json = "{ err:\"Cambio password non effettuato.\"}";
+                    json = "{ err:\"Change password failed.\"}";
             }
             else
-                json = "{ err:\"Sessione scaduta o login non effettuato.\"}";
+                json = "{ err:\"Not logged in or session expired.\"}";
             Rispondi(json);
         }
         /// <summary>
@@ -296,6 +315,30 @@ namespace vissidarte
             }
             if (err != "")
                 json = "{ err: \"" + db.bonificajson(err) + "\"}";
+            Rispondi(json);
+        }
+        /// <summary>
+        /// cancella account
+        /// </summary>
+        protected void removeAccount()
+        {
+            string json = "{}";
+
+            if (id != null)
+            {
+                cnn = db.InitConnection();
+                if (cnn != null)
+                {
+                    db.RunSQL("delete from " + db.tb("utenti") + " where id=" + id, cnn);
+                    //db.RunSQL("delete from shots where idu=" + id, cnn);
+                    // qui si potrebbe mettere un log in shots per segnalare che un utente si è cancellato (email utente e nome in combi)
+                }
+                db.CloseConnection(cnn);
+                if (db.LastErr != null)
+                    json = "{ err: \"" + db.bonificajson(db.LastErr) + "\"}";
+            }
+            else
+                json = "{ err: \"Not logged in or session expired.\"}";
             Rispondi(json);
         }
         /// <summary>
@@ -620,10 +663,10 @@ namespace vissidarte
                     {
                         fn = Server.MapPath("circolari/archivio/cir-" + hid.Value + ".pdf");
                         up1.PostedFile.SaveAs(fn);
-                        msg.Text = "file caricato con successo.";
+                        msg.Text = "file successfully uploaded.";
                     }
                     else
-                        msg.Text = "tipo file non valido.";
+                        msg.Text = "invalid file type.";
                 }
                 else if (huptipo.Value == "1")
                 {
@@ -634,10 +677,10 @@ namespace vissidarte
                         if (hdir.Value != "")
                             testCreaDIR("file/" + hdir.Value);
                         up1.PostedFile.SaveAs(fn);
-                        msg.Text = "file caricato con successo.";
+                        msg.Text = "file successfully uploaded.";
                     }
                     else
-                        msg.Text = "tipo file non valido.";
+                        msg.Text = "invalid file type.";
                 }
             }
         }
@@ -775,62 +818,67 @@ namespace vissidarte
         /// </summary>
         /// <param name="news">-1=ricerca,0=news,1=homesopra1,2=homesotto,3=orientamento,4=albo,10=circolari</param>
         /// <param name="src">parola da cercare</param>
-        /// <param name="id">id docente</param>
-        protected void GetNews(string news, string src, string id)
+        protected void GetNews(string news, string src)
         {
             string sql, titolo = "", abi = "", json = "{}", list = "lista: [", user = "";
-
-            if ((cnn = db.InitConnection()) != null)
+            if (id == null)
+                json = "{ err:\"Not logged in or session expired.\"}";
+            else
             {
-                // carica la lista
-                if (news == "-1")
+                if ((cnn = db.InitConnection()) != null)
                 {
-                    if (src == "")
-                        sql = "SELECT n.tags, n.tit, n.txt, n.ll, n.tema, n.href, n.img, n.dtpub, t.des from " + db.tb("news") + " n," + db.tb("tabelle") + " t where n.tipo=t.cod and t.tip='NEWS' and n.tipo=0 and now() >= n.dtpub and now() <= n.dtexp order by n.ord desc";
-                    else
-                        sql = "SELECT n.tags, n.tit, n.txt, n.ll, n.tema, n.href, n.img, n.dtpub, t.des from " + db.tb("news") + " n," + db.tb("tabelle") + " t " +
-                            "where n.tipo=t.cod and t.tip='NEWS' and now() >= n.dtpub and now() <= n.dtexp and " +
-                            "(n.tit like '%" + src + "%' or n.txt like '%" + src + "%' or n.tags like '%" + src + "%') " +
-                            "order by t.des, n.ord desc";
-                }
-                else
-                    sql = "SELECT n.tags, n.tit, n.txt, n.ll, n.tema, n.href, n.img, n.dtpub, t.des from " + db.tb("news") + " n," + db.tb("tabelle") + " t where n.tipo=t.cod and t.tip='NEWS' and n.tipo=" + news + " and now() >= n.dtpub and now() <= n.dtexp order by n.ord desc";
-                rs = db.RunSQLrs(sql, cnn);
-                while (rs != null && db.Read(rs))
-                {
-                    list += "{sez:\"" + db.gets(rs, "des") + "\"," +
-                        "img:\"" + db.gets(rs, "img") + "\"," +
-                        "tags:\"" + db.gets(rs, "tags") + "\"," +
-                        "dt:\"" + db.gets(rs, "dtpub").Substring(0, 10) + "\"," +
-                        "tit:\"" + db.bonificajson(db.gets(rs, "tit")) + "\"," +
-                        "txt:\"" + db.bonificajson(db.gets(rs, "txt")) + "\"," +
-                        "th:\"" + db.bonificajson(db.gets(rs, "tema")) + "\"," +
-                        "ll:\"" + db.bonificajson(db.gets(rs, "ll")) + "\"," +
-                        "href:\"" + db.gets(rs, "href") + "\"},";
-                }
-                db.Close(rs);
-                list += "]";
-                if (Session["id"] != null)
-                {
-                    // carica l'utente loggato
-                    sql = "select * from " + db.tb("utenti") + " where id=" + Session["id"];
-                    rs = db.RunSQLrs(sql, cnn);
-                    if (rs != null && db.Read(rs))
+                    // carica la lista
+                    if (news == "-1")
                     {
-                        string[] qq;
-                        qq = db.gets(rs, "info").Split('|');
-                        if (qq.Length > 4)
-                            abi = qq[4];
-                        user = "utente: {id:" + db.gets(rs, "id") + ",abi:\"" + abi + "\",tipo:" + db.gets(rs, "tipo") + ",nome:\"" + db.bonifica(db.gets(rs, "cognome")) + " " + db.bonifica(db.gets(rs, "nome")) + "\"}";
+                        if (src == "")
+                            sql = "SELECT n.tags, n.tit, n.txt, n.ll, n.tema, n.href, n.img, n.dtpub, t.des from " + db.tb("news") + " n," + db.tb("tabelle") + " t "+
+                                "where n.tipo=t.cod and t.tip='NEWS' and n.tipo=0 and now() >= n.dtpub and now() <= n.dtexp order by n.ord desc";
+                        else
+                            sql = "SELECT n.tags, n.tit, n.txt, n.ll, n.tema, n.href, n.img, n.dtpub, t.des from " + db.tb("news") + " n," + db.tb("tabelle") + " t " +
+                                "where n.tipo=0 and n.tipo=t.cod and t.tip='NEWS' and now() >= n.dtpub and now() <= n.dtexp and " +
+                                "(n.tit like '%" + src + "%' or n.txt like '%" + src + "%' or n.tags like '%" + src + "%') " +
+                                "order by t.des, n.ord desc";
+                    }
+                    else
+                        sql = "SELECT n.tags, n.tit, n.txt, n.ll, n.tema, n.href, n.img, n.dtpub, t.des from " + db.tb("news") + " n," + db.tb("tabelle") + " t "+
+                            "where n.tipo=t.cod and t.tip='NEWS' and n.tipo=" + news + " and now() >= n.dtpub and now() <= n.dtexp order by n.ord desc";
+                    rs = db.RunSQLrs(sql, cnn);
+                    while (rs != null && db.Read(rs))
+                    {
+                        list += "{sez:\"" + db.gets(rs, "des") + "\"," +
+                            "img:\"" + db.gets(rs, "img") + "\"," +
+                            "tags:\"" + db.gets(rs, "tags") + "\"," +
+                            "dt:\"" + db.gets(rs, "dtpub").Substring(0, 10) + "\"," +
+                            "tit:\"" + db.bonificajson(db.gets(rs, "tit")) + "\"," +
+                            "txt:\"" + db.bonificajson(db.gets(rs, "txt")) + "\"," +
+                            "th:\"" + db.bonificajson(db.gets(rs, "tema")) + "\"," +
+                            "ll:\"" + db.bonificajson(db.gets(rs, "ll")) + "\"," +
+                            "href:\"" + db.gets(rs, "href") + "\"},";
                     }
                     db.Close(rs);
+                    list += "]";
+                    if (Session["id"] != null)
+                    {
+                        // carica l'utente loggato
+                        sql = "select * from " + db.tb("utenti") + " where id=" + Session["id"];
+                        rs = db.RunSQLrs(sql, cnn);
+                        if (rs != null && db.Read(rs))
+                        {
+                            string[] qq;
+                            qq = db.gets(rs, "info").Split('|');
+                            if (qq.Length > 4)
+                                abi = qq[4];
+                            user = "utente: {id:" + db.gets(rs, "id") + ",abi:\"" + abi + "\",tipo:" + db.gets(rs, "tipo") + ",nome:\"" + db.bonifica(db.gets(rs, "cognome")) + " " + db.bonifica(db.gets(rs, "nome")) + "\"}";
+                        }
+                        db.Close(rs);
+                    }
                 }
+                db.CloseConnection(cnn);
+                if (db.LastErr != null)
+                    json = "{ err:\"" + db.bonificajson(db.LastErr) + "\"}";
+                else
+                    json = "{online:\"" + Application["AccessiContemporanei"].ToString() + "\",title:\"" + titolo + "\"," + list + "," + user + "}";
             }
-            db.CloseConnection(cnn);
-            if (db.LastErr != null)
-                json = "{ err:\"" + db.bonificajson(db.LastErr) + "\"}";
-            else
-                json = "{online:\"" + Application["AccessiContemporanei"].ToString() + "\",title:\"" + titolo + "\"," + list + "," + user + "}";
             Rispondi(json);
         }
         /// <summary>
